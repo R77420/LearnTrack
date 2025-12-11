@@ -1,0 +1,47 @@
+# Xcode
+DerivedData/
+build/
+*.xcuserstate
+*.xccheckout
+*.xcscmblueprint
+
+# User-specific files
+*.xcuserdata/
+*.moved-aside
+*.xcconfig
+
+# Swift Package Manager
+/.build/
+Packages/
+Package.resolved
+
+# CocoaPods (if ever used)
+Pods/
+Podfile.lock
+
+# Carthage
+Carthage/Build/
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+
+# Archive files
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Logs
+*.log
+
+# macOS
+.DS_Store
+
+# SwiftPM Xcode workspace
+.swiftpm/
+
+# Xcode previews cache
+*.swiftpm
+
