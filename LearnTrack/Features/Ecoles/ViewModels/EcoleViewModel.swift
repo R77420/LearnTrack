@@ -21,4 +21,30 @@ class EcoleViewModel: ObservableObject {
         
         isLoading = false
     }
+    
+    func createEcole(nom: String, adresse: String, ville: String, email: String) async {
+        isLoading = true
+        errorMessage = nil
+        
+        let newEcole = EcoleCreate(
+            nom: nom,
+            adresse: adresse.isEmpty ? nil : adresse,
+            ville: ville.isEmpty ? nil : ville,
+            codePostal: nil,
+            telephone: nil,
+            email: email.isEmpty ? nil : email,
+            responsableNom: nil,
+            capacite: nil,
+            notes: nil
+        )
+        
+        do {
+            _ = try await APIService.shared.createEcole(newEcole)
+            await fetchEcoles()
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+        
+        isLoading = false
+    }
 }

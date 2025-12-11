@@ -15,29 +15,31 @@ struct RegisterView: View {
             VStack(spacing: 20) {
                 TextField("Prénom", text: $prenom)
                     .padding()
-                    .background(Color(.systemGray6))
+                    .background(Color.gray.opacity(0.1))
                     .cornerRadius(10)
                 
                 TextField("Nom", text: $nom)
                     .padding()
-                    .background(Color(.systemGray6))
+                    .background(Color.gray.opacity(0.1))
                     .cornerRadius(10)
                 
                 TextField("Email", text: $email)
-                    .keyboardType(.emailAddress)
-                    .autocapitalization(.none)
                     .padding()
-                    .background(Color(.systemGray6))
+                    .background(Color.gray.opacity(0.1))
                     .cornerRadius(10)
+                    #if os(iOS)
+                    .textInputAutocapitalization(.never)
+                    .keyboardType(.emailAddress)
+                    #endif
                 
                 SecureField("Mot de passe", text: $password)
                     .padding()
-                    .background(Color(.systemGray6))
+                    .background(Color.gray.opacity(0.1))
                     .cornerRadius(10)
                 
                 SecureField("Confirmer le mot de passe", text: $confirmPassword)
                     .padding()
-                    .background(Color(.systemGray6))
+                    .background(Color.gray.opacity(0.1))
                     .cornerRadius(10)
                 
                 if let errorMessage = errorMessage {

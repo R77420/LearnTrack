@@ -2,6 +2,8 @@ import SwiftUI
 
 struct LoginView: View {
     @StateObject private var viewModel = LoginViewModel()
+    @State private var isShowingResetAlert = false
+    @State private var resetEmail = ""
     
     var body: some View {
         NavigationStack {
@@ -28,22 +30,40 @@ struct LoginView: View {
                 // Form
                 VStack(spacing: 15) {
                     TextField("Email", text: $viewModel.email)
-                        .keyboardType(.emailAddress)
-                        .autocapitalization(.none)
                         .padding()
-                        .background(Color(.systemGray6))
+                        .background(Color.gray.opacity(0.1))
                         .cornerRadius(10)
+                        #if os(iOS)
+                        .textInputAutocapitalization(.never)
+                        .keyboardType(.emailAddress)
+                        #endif
                     
                     SecureField("Mot de passe", text: $viewModel.password)
                         .padding()
-                        .background(Color(.systemGray6))
+                        .background(Color.gray.opacity(0.1))
                         .cornerRadius(10)
+                    
+                    HStack {
+                        Spacer()
+                        Button("Mot de passe oublié ?") {
+                            resetEmail = viewModel.email
+                            isShowingResetAlert = true
+                        }
+                        .font(.caption)
+                        .foregroundStyle(.blue)
+                    }
                 }
                 .padding(.horizontal)
                 
                 if let errorMessage = viewModel.errorMessage {
                     Text(errorMessage)
                         .foregroundStyle(.red)
+                        .font(.caption)
+                }
+                
+                if let resetMessage = viewModel.resetMessage {
+                    Text(resetMessage)
+                        .foregroundStyle(.green)
                         .font(.caption)
                 }
                 
@@ -79,7 +99,24 @@ struct LoginView: View {
             }
             .padding()
             .navigationTitle("Connexion")
+            #if os(iOS)
             .navigationBarHidden(true)
+            #endif
+            .alert("Réinitialiser le mot de passe", isPresented: $isShowingResetAlert) {
+                TextField("Email", text: $resetEmail)
+                    #if os(iOS)
+                    .textInputAutocapitalization(.never)
+                    .keyboardType(.emailAddress)
+                    #endif
+                Button("Envoyer", action: {
+                    Task {
+                        await viewModel.resetPassword(for: resetEmail)
+                    }
+                })
+                Button("Annuler", role: .cancel) { }
+            } message: {
+                Text("Entrez votre adresse email pour recevoir un lien de réinitialisation.")
+            }
         }
     }
 }

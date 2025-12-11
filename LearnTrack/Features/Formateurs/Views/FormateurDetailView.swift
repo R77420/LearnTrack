@@ -2,66 +2,97 @@ import SwiftUI
 
 struct FormateurDetailView: View {
     let formateur: Formateur
+    @Environment(\.openURL) var openURL
     
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
+            VStack(spacing: 20) {
                 // Header
-                HStack(spacing: 15) {
+                VStack {
                     Circle()
-                        .fill(Color.orange.opacity(0.2))
-                        .frame(width: 70, height: 70)
+                        .fill(Color.blue.opacity(0.1))
+                        .frame(width: 100, height: 100)
                         .overlay(
-                            Text(String(formateur.prenom.prefix(1)) + String(formateur.nom.prefix(1)))
-                                .font(.title)
-                                .foregroundStyle(.orange)
+                            Text("\(formateur.prenom.prefix(1))\(formateur.nom.prefix(1))")
+                                .font(.system(size: 40, weight: .bold))
+                                .foregroundStyle(.blue)
                         )
                     
-                    VStack(alignment: .leading) {
-                        Text("\(formateur.prenom) \(formateur.nom)")
-                            .font(.title2)
-                            .fontWeight(.bold)
-                        Text(formateur.email)
+                    Text("\(formateur.prenom) \(formateur.nom)")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                    
+                    if let specialites = formateur.specialites, !specialites.isEmpty {
+                        Text(specialites.joined(separator: " • "))
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                     }
                 }
                 
-                // Actions
-                HStack(spacing: 20) {
-                    ContactButton(icon: "phone.fill", label: "Appeler", action: {
+                // Quick Actions
+                HStack(spacing: 40) {
+                    ActionButon(icon: "phone.fill", label: "Appeler") {
                         if let phone = formateur.telephone, let url = URL(string: "tel://\(phone)") {
-                            UIApplication.shared.open(url)
+                            openURL(url)
                         }
-                    })
+                    }
                     
-                    ContactButton(icon: "envelope.fill", label: "Email", action: {
-                        if let url = URL(string: "mailto:\(formateur.email)") {
-                            UIApplication.shared.open(url)
+                    ActionButon(icon: "envelope.fill", label: "Email") {
+                        if let email = URL(string: "mailto:\(formateur.email)") {
+                            openURL(email)
                         }
-                    })
+                    }
+                    
+                    ActionButon(icon: "message.fill", label: "SMS") {
+                        if let phone = formateur.telephone, let url = URL(string: "sms://\(phone)") {
+                            openURL(url)
+                        }
+                    }
                 }
                 
                 Divider()
                 
-                // Details
+                 // Coordonnées
                 VStack(alignment: .leading, spacing: 10) {
-                    DetailRow(icon: "briefcase", title: "Spécialités", value: formateur.specialites?.joined(separator: ", ") ?? "N/A")
-                    DetailRow(icon: "eurosign.circle", title: "Tarif", value: formateur.tarifJournalier.map { String(format: "%.2f €/j", $0) } ?? "N/A")
-                    DetailRow(icon: "mappin.circle", title: "Adresse", value: [formateur.adresse, formateur.codePostal, formateur.ville].compactMap({ $0 }).joined(separator: ", "))
+                    Text("Coordonnées")
+                        .font(.headline)
                     
-                    if let notes = formateur.notes, !notes.isEmpty {
-                        VStack(alignment: .leading, spacing: 5) {
-                            Text("Notes")
-                                .font(.headline)
-                            Text(notes)
-                                .font(.body)
-                        }
-                        .padding(.top)
+                    ContactRow(icon: "envelope", text: formateur.email)
+                    if let phone = formateur.telephone {
+                        ContactRow(icon: "phone", text: phone)
+                    }
+                     if let adresse = formateur.adresse {
+                         HStack(alignment: .top) {
+                             Image(systemName: "map")
+                                 .frame(width: 24)
+                             MapsLink(address: "\(adresse) \(formateur.codePostal ?? "") \(formateur.ville ?? "")")
+                         }
                     }
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
                 
-                Spacer()
+                Divider()
+                
+                // Informations Professionnelles
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("Informations Professionnelles")
+                        .font(.headline)
+                    
+                     if let tarif = formateur.tarifJournalier {
+                        InfoRow(label: "Tarif Journalier", value: String(format: "%.2f €", tarif))
+                    }
+                    
+                    InfoRow(label: "Type", value: (formateur.estInterne == true) ? "Interne" : "Externe")
+                    
+                    if let siret = formateur.siret {
+                         InfoRow(label: "SIRET", value: siret)
+                    }
+                    
+                    if let nda = formateur.nda {
+                         InfoRow(label: "NDA", value: nda)
+                    }
+                }
+                 .frame(maxWidth: .infinity, alignment: .leading)
             }
             .padding()
         }
@@ -69,9 +100,7 @@ struct FormateurDetailView: View {
     }
 }
 
-// Reusable Components (can be moved to Shared if needed)
-
-struct ContactButton: View {
+fileprivate struct ActionButon: View {
     let icon: String
     let label: String
     let action: () -> Void
@@ -79,38 +108,45 @@ struct ContactButton: View {
     var body: some View {
         Button(action: action) {
             VStack {
-                Image(systemName: icon)
-                    .font(.title2)
+                Circle()
+                    .fill(Color.blue)
+                    .frame(width: 50, height: 50)
+                    .overlay(
+                        Image(systemName: icon)
+                            .foregroundStyle(.white)
+                    )
                 Text(label)
                     .font(.caption)
             }
-            .frame(maxWidth: .infinity)
-            .padding()
-            .background(Color(.systemGray6))
-            .cornerRadius(10)
         }
     }
 }
 
-struct DetailRow: View {
+fileprivate struct ContactRow: View {
     let icon: String
-    let title: String
+    let text: String
+    
+    var body: some View {
+        HStack {
+            Image(systemName: icon)
+                .frame(width: 24)
+                .foregroundStyle(.secondary)
+            Text(text)
+        }
+    }
+}
+
+fileprivate struct InfoRow: View {
+    let label: String
     let value: String
     
     var body: some View {
-        HStack(alignment: .top) {
-            Image(systemName: icon)
-                .frame(width: 25)
-                .foregroundStyle(.blue)
-            
-            VStack(alignment: .leading) {
-                Text(title)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                Text(value)
-                    .font(.body)
-            }
+        HStack {
+            Text(label)
+                .foregroundStyle(.secondary)
+            Spacer()
+            Text(value)
+                .fontWeight(.medium)
         }
-        .padding(.vertical, 5)
     }
 }
