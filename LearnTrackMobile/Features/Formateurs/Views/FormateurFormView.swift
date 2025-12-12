@@ -12,7 +12,7 @@ struct FormateurFormView: View {
     @State private var telephone = ""
     @State private var specialites = ""
     @State private var tarifJournalier = ""
-    @State private var estInterne = true // Default to Interne as requested
+    @State private var estInterne = true // CONFORME: estInterne=true signifie Interne par défaut
     @State private var siret = ""
     @State private var nda = ""
     @State private var adresse = ""
@@ -50,12 +50,24 @@ struct FormateurFormView: View {
                 }
                 
                 Section(header: Text("Professionnel")) {
+                    // AJOUT CRITIQUE (FORM-09) : Permet de choisir Interne/Externe
+                    Toggle("Formateur Interne", isOn: $estInterne)
+                    
                     TextField("Spécialités (séparées par virgule)", text: $specialites)
                     
                     TextField("Tarif Journalier (€)", text: $tarifJournalier)
                         #if os(iOS)
                         .keyboardType(.decimalPad)
                         #endif
+                    
+                    // AFFICHAGE CONDITIONNEL: SI EXTERNE
+                    if !estInterne { // Note: !estInterne signifie que l'on est Externe
+                        TextField("SIRET", text: $siret)
+                            #if os(iOS)
+                            .keyboardType(.numberPad)
+                            #endif
+                        TextField("NDA", text: $nda)
+                    }
                 }
             }
             .navigationTitle(isEditing ? "Modifier Formateur" : "Nouveau Formateur")
@@ -67,26 +79,42 @@ struct FormateurFormView: View {
                 }
                 
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(isEditing ? "Enregistrer" : "Créer") { // CORRECTION BOUTON
+                    Button(isEditing ? "Enregistrer" : "Créer") {
                         Task {
                             let specs = specialites.components(separatedBy: ",").map { $0.trimmingCharacters(in: .whitespaces) }
                             let tarif = Double(tarifJournalier.replacingOccurrences(of: ",", with: "."))
                             
+                            
                             if let formateur = formateurToEdit {
                                 // Opération MODIFIER (FORM-07)
                                 let updateData = FormateurUpdate(
-                                    nom: nom, prenom: prenom, email: email, telephone: telephone.isEmpty ? nil : telephone,
-                                    specialites: specs.isEmpty ? nil : specs, tarifJournalier: tarif,
-                                    adresse: adresse.isEmpty ? nil : adresse, ville: ville.isEmpty ? nil : ville, codePostal: codePostal.isEmpty ? nil : codePostal, estInterne: estInterne, siret: siret.isEmpty ? nil : siret, nda: nda.isEmpty ? nil : nda
+                                    nom: nom,
+                                    prenom: prenom,
+                                    email: email,
+                                    telephone: telephone.isEmpty ? nil : telephone,
+                                    specialites: specs.isEmpty ? nil : specs,
+                                    tarifJournalier: tarif,
+                                    adresse: adresse.isEmpty ? nil : adresse,
+                                    ville: ville.isEmpty ? nil : ville,
+                                    codePostal: codePostal.isEmpty ? nil : codePostal,
+                                    estInterne: estInterne,
+                                    siret: siret.isEmpty ? nil : siret,
+                                    nda: nda.isEmpty ? nil : nda
                                 )
                                 await viewModel.updateFormateur(id: formateur.id, updateData: updateData)
                             } else {
-                                // Opération CRÉER
                                 await viewModel.createFormateur(
-                                    nom: nom, prenom: prenom, email: email, telephone: telephone.isEmpty ? nil : telephone,
-                                    specialites: specs.isEmpty ? nil : specs, tarifJournalier: tarif, estInterne: estInterne,
-                                    siret: siret.isEmpty ? nil : siret, nda: nda.isEmpty ? nil : nda,
-                                    adresse: adresse.isEmpty ? nil : adresse, ville: ville.isEmpty ? nil : ville,
+                                    nom: nom,
+                                    prenom: prenom,
+                                    email: email,
+                                    telephone: telephone.isEmpty ? nil : telephone,
+                                    specialites: specs.isEmpty ? nil : specs,
+                                    tarifJournalier: tarif,
+                                    estInterne: estInterne, // ✅ NO inversion
+                                    siret: siret.isEmpty ? nil : siret,
+                                    nda: nda.isEmpty ? nil : nda,
+                                    adresse: adresse.isEmpty ? nil : adresse,
+                                    ville: ville.isEmpty ? nil : ville,
                                     codePostal: codePostal.isEmpty ? nil : codePostal
                                 )
                             }
@@ -96,7 +124,6 @@ struct FormateurFormView: View {
                     .disabled(nom.isEmpty || prenom.isEmpty || email.isEmpty)
                 }
             }
-            // CORRECTION: Chargement des données à l'ouverture pour l'édition
             .onAppear {
                 if isEditing, let formateur = formateurToEdit {
                     nom = formateur.nom
