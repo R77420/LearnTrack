@@ -3,6 +3,13 @@ import SwiftUI
 struct ClientDetailView: View {
     let client: Client
     @Environment(\.openURL) var openURL
+    @Environment(\.dismiss) var dismiss // Permet de fermer la vue après suppression
+        
+    // NEW: Ajoutez les ViewModels pour l'action et l'Auth
+    @StateObject private var authManager = AuthService.shared
+    @StateObject private var viewModel = ClientViewModel()
+    @State private var showingEditSheet = false
+    @State private var showingDeleteAlert = false
     
     var body: some View {
         ScrollView {
@@ -89,6 +96,41 @@ struct ClientDetailView: View {
             .padding()
         }
         .navigationTitle("Détails Client")
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Menu {
+                    // CLI-06: Modifier
+                    Button(action: { showingEditSheet = true }) {
+                        Label("Modifier", systemImage: "pencil")
+                    }
+                    
+                    // CLI-07 & SEC-05: Supprimer (Admin Only)
+                    if authManager.isAdmin {
+                        Button(role: .destructive, action: { showingDeleteAlert = true }) {
+                            Label("Supprimer", systemImage: "trash")
+                        }
+                    }
+                } label: {
+                    Image(systemName: "ellipsis.circle")
+                }
+            }
+        }
+        // CORRECTION: Utilisation du ClientFormView pour l'édition (CLI-06)
+        .sheet(isPresented: $showingEditSheet) {
+            ClientFormView(viewModel: viewModel, clientToEdit: client)
+        }
+        // Suppression (CLI-07)
+        .alert("Supprimer le client", isPresented: $showingDeleteAlert) {
+            Button("Annuler", role: .cancel) { }
+            Button("Supprimer", role: .destructive) {
+                Task {
+                    await viewModel.deleteClient(id: client.id)
+                    if viewModel.errorMessage == nil { dismiss() }
+                }
+            }
+        } message: {
+            Text("Êtes-vous sûr de vouloir supprimer le client \(client.nom)?")
+        }
     }
 }
 

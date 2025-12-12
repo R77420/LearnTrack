@@ -49,4 +49,35 @@ class EcoleViewModel: ObservableObject {
         
         isLoading = false
     }
+    
+     // NEW: Update Ecole (ECO-06)
+      func updateEcole(id: Int, updateData: EcoleUpdate) async {
+            isLoading = true
+            errorMessage = nil
+            
+            do {
+                // L'appel API est maintenant simplifié et correct
+                _ = try await api.updateEcole(id: id, updateData)
+                await fetchEcoles()
+            } catch {
+                errorMessage = error.localizedDescription
+            }
+            
+            isLoading = false
+        }
+
+        // NEW: Delete Ecole (ECO-07)
+        func deleteEcole(id: Int) async {
+            isLoading = true
+            errorMessage = nil
+            
+            do {
+                try await api.deleteEcole(id: id)
+                ecoles.removeAll { $0.id == id }
+            } catch {
+                errorMessage = error.localizedDescription
+            }
+            
+            isLoading = false
+        }
 }

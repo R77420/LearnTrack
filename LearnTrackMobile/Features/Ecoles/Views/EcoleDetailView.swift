@@ -3,6 +3,13 @@ import SwiftUI
 struct EcoleDetailView: View {
     let ecole: Ecole
     @Environment(\.openURL) var openURL
+    @Environment(\.dismiss) var dismiss
+    
+    // NEW: Ajoutez les ViewModels pour l'action et l'Auth
+    @StateObject private var authManager = AuthService.shared
+    @StateObject private var viewModel = EcoleViewModel()
+    @State private var showingEditSheet = false
+    @State private var showingDeleteAlert = false
     
     var body: some View {
         ScrollView {
@@ -69,6 +76,39 @@ struct EcoleDetailView: View {
             .padding()
         }
         .navigationTitle("Détails École")
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Menu {
+                    Button(action: { showingEditSheet = true }) { // ECO-06
+                        Label("Modifier", systemImage: "pencil")
+                    }
+                    
+                    if authManager.isAdmin { // ECO-07 & SEC-05
+                        Button(role: .destructive, action: { showingDeleteAlert = true }) {
+                            Label("Supprimer", systemImage: "trash")
+                        }
+                    }
+                } label: {
+                    Image(systemName: "ellipsis.circle")
+                }
+            }
+        }
+        .sheet(isPresented: $showingEditSheet) {
+            // On utilise le formulaire de création existant et on lui passe l'objet `ecole`
+            EcoleFormView(viewModel: viewModel, ecoleToEdit: ecole)
+        }
+        // NEW: Alert for Delete
+        .alert("Supprimer l'école", isPresented: $showingDeleteAlert) {
+            Button("Annuler", role: .cancel) { }
+            Button("Supprimer", role: .destructive) {
+                Task {
+                    await viewModel.deleteEcole(id: ecole.id)
+                    if viewModel.errorMessage == nil { dismiss() }
+                }
+            }
+        } message: {
+            Text("Êtes-vous sûr de vouloir supprimer l'école \(ecole.nom)?")
+        }
     }
 }
 

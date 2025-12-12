@@ -4,10 +4,14 @@ struct EcoleFormView: View {
     @Environment(\.dismiss) var dismiss
     @ObservedObject var viewModel: EcoleViewModel
     
+    var ecoleToEdit: Ecole?
+    
     @State private var nom = ""
     @State private var adresse = ""
     @State private var ville = ""
     @State private var contactEmail = ""
+    
+    private var isEditing: Bool { ecoleToEdit != nil }
     
     var body: some View {
         NavigationStack {
@@ -23,7 +27,7 @@ struct EcoleFormView: View {
                         #endif
                 }
             }
-            .navigationTitle("Nouvelle École")
+            .navigationTitle(isEditing ? "Modifier École" : "Nouvelle École")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Annuler") {
@@ -32,13 +36,34 @@ struct EcoleFormView: View {
                 }
                 
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Enregistrer") {
+                    Button(isEditing ? "Enregistrer" : "Créer") { // CORRECTION BOUTON
                         Task {
-                            await viewModel.createEcole(nom: nom, adresse: adresse, ville: ville, email: contactEmail)
+                            if let ecole = ecoleToEdit {
+                                // Opération MODIFIER (ECO-06)
+                                let updateData = EcoleUpdate(
+                                    nom: nom,
+                                    adresse: adresse.isEmpty ? nil : adresse,
+                                    ville: ville.isEmpty ? nil : ville,
+                                    email: contactEmail.isEmpty ? nil : contactEmail
+                                )
+                                await viewModel.updateEcole(id: ecole.id, updateData: updateData)
+                            } else {
+                                // Opération CRÉER
+                                await viewModel.createEcole(nom: nom, adresse: adresse, ville: ville, email: contactEmail)
+                            }
                             dismiss()
                         }
                     }
                     .disabled(nom.isEmpty)
+                }
+            }
+            // CORRECTION: Chargement des données à l'ouverture pour l'édition
+            .onAppear {
+                if isEditing, let ecole = ecoleToEdit {
+                    nom = ecole.nom
+                    adresse = ecole.adresse ?? ""
+                    ville = ecole.ville ?? ""
+                    contactEmail = ecole.email ?? ""
                 }
             }
         }

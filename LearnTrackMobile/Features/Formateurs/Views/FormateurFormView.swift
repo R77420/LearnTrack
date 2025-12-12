@@ -4,6 +4,8 @@ struct FormateurFormView: View {
     @Environment(\.dismiss) var dismiss
     @ObservedObject var viewModel: FormateurViewModel
     
+    var formateurToEdit: Formateur?
+    
     @State private var nom = ""
     @State private var prenom = ""
     @State private var email = ""
@@ -16,6 +18,8 @@ struct FormateurFormView: View {
     @State private var adresse = ""
     @State private var ville = ""
     @State private var codePostal = ""
+    
+    private var isEditing: Bool { formateurToEdit != nil }
     
     var body: some View {
         NavigationStack {
@@ -54,7 +58,7 @@ struct FormateurFormView: View {
                         #endif
                 }
             }
-            .navigationTitle("Nouveau Formateur")
+            .navigationTitle(isEditing ? "Modifier Formateur" : "Nouveau Formateur")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Annuler") {
@@ -63,29 +67,50 @@ struct FormateurFormView: View {
                 }
                 
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Enregistrer") {
+                    Button(isEditing ? "Enregistrer" : "Créer") { // CORRECTION BOUTON
                         Task {
                             let specs = specialites.components(separatedBy: ",").map { $0.trimmingCharacters(in: .whitespaces) }
                             let tarif = Double(tarifJournalier.replacingOccurrences(of: ",", with: "."))
                             
-                             await viewModel.createFormateur(
-                                nom: nom,
-                                prenom: prenom,
-                                email: email,
-                                telephone: telephone.isEmpty ? nil : telephone,
-                                specialites: specs.isEmpty ? nil : specs,
-                                tarifJournalier: tarif,
-                                estInterne: estInterne,
-                                siret: siret.isEmpty ? nil : siret,
-                                nda: nda.isEmpty ? nil : nda,
-                                adresse: adresse.isEmpty ? nil : adresse,
-                                ville: ville.isEmpty ? nil : ville,
-                                codePostal: codePostal.isEmpty ? nil : codePostal
-                            )
+                            if let formateur = formateurToEdit {
+                                // Opération MODIFIER (FORM-07)
+                                let updateData = FormateurUpdate(
+                                    nom: nom, prenom: prenom, email: email, telephone: telephone.isEmpty ? nil : telephone,
+                                    specialites: specs.isEmpty ? nil : specs, tarifJournalier: tarif,
+                                    adresse: adresse.isEmpty ? nil : adresse, ville: ville.isEmpty ? nil : ville, codePostal: codePostal.isEmpty ? nil : codePostal, estInterne: estInterne, siret: siret.isEmpty ? nil : siret, nda: nda.isEmpty ? nil : nda
+                                )
+                                await viewModel.updateFormateur(id: formateur.id, updateData: updateData)
+                            } else {
+                                // Opération CRÉER
+                                await viewModel.createFormateur(
+                                    nom: nom, prenom: prenom, email: email, telephone: telephone.isEmpty ? nil : telephone,
+                                    specialites: specs.isEmpty ? nil : specs, tarifJournalier: tarif, estInterne: estInterne,
+                                    siret: siret.isEmpty ? nil : siret, nda: nda.isEmpty ? nil : nda,
+                                    adresse: adresse.isEmpty ? nil : adresse, ville: ville.isEmpty ? nil : ville,
+                                    codePostal: codePostal.isEmpty ? nil : codePostal
+                                )
+                            }
                             dismiss()
                         }
                     }
                     .disabled(nom.isEmpty || prenom.isEmpty || email.isEmpty)
+                }
+            }
+            // CORRECTION: Chargement des données à l'ouverture pour l'édition
+            .onAppear {
+                if isEditing, let formateur = formateurToEdit {
+                    nom = formateur.nom
+                    prenom = formateur.prenom
+                    email = formateur.email
+                    telephone = formateur.telephone ?? ""
+                    specialites = formateur.specialites?.joined(separator: ", ") ?? ""
+                    tarifJournalier = String(formateur.tarifJournalier ?? 0)
+                    estInterne = formateur.estInterne ?? true
+                    siret = formateur.siret ?? ""
+                    nda = formateur.nda ?? ""
+                    adresse = formateur.adresse ?? ""
+                    ville = formateur.ville ?? ""
+                    codePostal = formateur.codePostal ?? ""
                 }
             }
         }

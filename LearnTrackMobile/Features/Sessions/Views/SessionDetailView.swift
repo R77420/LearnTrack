@@ -2,6 +2,12 @@ import SwiftUI
 
 struct SessionDetailView: View {
     let session: Session
+    // NEW: Add necessary state and managers
+    @Environment(\.openURL) var openURL
+    @StateObject private var authManager = AuthService.shared
+    @StateObject private var viewModel = SessionViewModel()
+    @State private var showingEditSheet = false
+    @State private var showingDeleteAlert = false
     
     var body: some View {
             ScrollView {
@@ -100,15 +106,25 @@ struct SessionDetailView: View {
             .navigationBarTitleDisplayMode(.inline)
             #endif
             .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    Menu {
-                        Button(action: {}) { Label("Modifier", systemImage: "pencil") }
-                        Button(action: {}) { Label("Partager", systemImage: "square.and.arrow.up") }
-                        Button(role: .destructive, action: {}) { Label("Supprimer", systemImage: "trash") }
-                    } label: {
-                        Image(systemName: "ellipsis.circle")
+            ToolbarItem(placement: .primaryAction) {
+                Menu {
+                    Button(action: { showingEditSheet = true }) { Label("Modifier", systemImage: "pencil") } // SESS-03
+                    
+                    // NEW: ShareLink implementation (SESS-06)
+                    ShareLink(item: session.shareText, subject: Text("Session: \(session.titre)")) {
+                        Label("Partager", systemImage: "square.and.arrow.up")
                     }
+                    
+                    if authManager.isAdmin { // RBAC check (SEC-05)
+                        Button(role: .destructive, action: { showingDeleteAlert = true }) { Label("Supprimer", systemImage: "trash") } // SESS-04
+                    }
+                } label: {
+                    Image(systemName: "ellipsis.circle")
                 }
             }
+        }
+        .sheet(isPresented: $showingEditSheet) {
+                    SessionFormView(viewModel: viewModel, sessionToEdit: session) // Le formulaire reçoit l'objet `session`
+                }
     }
 }

@@ -5,6 +5,7 @@
 //  Created by Hiba iazza on 11/12/2025.
 //
 
+import Foundation
 struct Session: Codable, Identifiable {
     let id: Int
     let titre: String
@@ -33,6 +34,22 @@ struct Session: Codable, Identifiable {
         case ecoleId = "ecole_id"
         case formateurId = "formateur_id"
         case nbParticipants = "nb_participants"
+    }
+    
+    // Helper method for sharing (SESS-06)
+    var shareText: String {
+        let priceText = prix != nil ? String(format: "%.2f €", prix!) : "Non spécifié"
+        
+        return """
+            📚 **Session de formation**
+            
+            🏷️ Titre : \(titre)
+            📅 Dates : du \(dateDebut) au \(dateFin)
+            ⏰ Horaires : \(heureDebut ?? "N/A") – \(heureFin ?? "N/A")
+            💻 Modalité : \(modalite ?? "N/A")
+            📍 Lieu : \(lieu ?? "N/A")
+            💶 Tarif client : \(priceText)
+            """
     }
 }
 

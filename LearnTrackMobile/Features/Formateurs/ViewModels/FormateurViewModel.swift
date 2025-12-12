@@ -65,4 +65,32 @@ class FormateurViewModel: ObservableObject {
         
         isLoading = false
     }
+    
+    // NEW: Update Formateur (FORM-07)
+    func updateFormateur(id: Int, updateData: FormateurUpdate) async {
+        isLoading = true
+        errorMessage = nil
+        do {
+            _ = try await api.updateFormateur(id: id, updateData)
+            await fetchFormateurs()
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+        isLoading = false
+    }
+
+    // NEW: Delete Formateur (FORM-08)
+    func deleteFormateur(id: Int) async {
+        isLoading = true
+        errorMessage = nil
+        
+        do {
+            try await api.deleteFormateur(id: id)
+            formateurs.removeAll { $0.id == id }
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+        
+        isLoading = false
+    }
 }

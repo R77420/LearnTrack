@@ -51,4 +51,30 @@ class ClientViewModel: ObservableObject {
         
         isLoading = false
     }
+
+    // NEW: Update Client (CLI-06)
+    func updateClient(id: Int, updateData: ClientUpdate) async {
+        isLoading = true
+        errorMessage = nil
+        do {
+            _ = try await api.updateClient(id: id, updateData)
+            await fetchClients()
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+        isLoading = false
+    }
+    
+    // NEW: Delete Client (CLI-07)
+    func deleteClient(id: Int) async {
+        isLoading = true
+        errorMessage = nil
+        do {
+            try await api.deleteClient(id: id)
+            clients.removeAll { $0.id == id }
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+        isLoading = false
+    }
 }

@@ -9,6 +9,9 @@ struct ClientFormView: View {
     @State private var telephone = ""
     @State private var ville = ""
     
+    var clientToEdit: Client?
+    private var isEditing: Bool { clientToEdit != nil }
+    
     var body: some View {
         NavigationStack {
             Form {
@@ -26,7 +29,7 @@ struct ClientFormView: View {
                     TextField("Ville", text: $ville)
                 }
             }
-            .navigationTitle("Nouveau Client")
+            .navigationTitle(isEditing ? "Modifier Client" : "Nouveau Client")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Annuler") {
@@ -35,13 +38,36 @@ struct ClientFormView: View {
                 }
                 
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Enregistrer") {
+                    // CORRECTION: Bascule entre Créer et Enregistrer
+                    Button(isEditing ? "Enregistrer" : "Créer") {
                         Task {
-                            await viewModel.createClient(nom: nom, email: email, telephone: telephone, ville: ville)
+                            if let client = clientToEdit {
+                                // Opération MODIFIER (CLI-06)
+                                let updateData = ClientUpdate(
+                                    nom: nom,
+                                    email: email,
+                                    telephone: telephone,
+                                    ville: ville
+                                    // Les autres champs non affichés ne sont pas modifiés
+                                )
+                                await viewModel.updateClient(id: client.id, updateData: updateData)
+                            } else {
+                                // Opération CRÉER
+                                await viewModel.createClient(nom: nom, email: email, telephone: telephone, ville: ville)
+                            }
                             dismiss()
                         }
                     }
                     .disabled(nom.isEmpty)
+                }
+            }
+            // CORRECTION: Chargement des données à l'ouverture pour l'édition
+            .onAppear {
+                if isEditing, let client = clientToEdit {
+                    nom = client.nom
+                    email = client.email ?? ""
+                    telephone = client.telephone ?? ""
+                    ville = client.ville ?? ""
                 }
             }
         }

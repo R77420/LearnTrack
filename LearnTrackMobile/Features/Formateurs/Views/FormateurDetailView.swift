@@ -4,6 +4,14 @@ struct FormateurDetailView: View {
     let formateur: Formateur
     @Environment(\.openURL) var openURL
     
+    @Environment(\.dismiss) var dismiss
+        
+    // NEW: Ajoutez les ViewModels pour l'action et l'Auth
+    @StateObject private var authManager = AuthService.shared
+    @StateObject private var viewModel = FormateurViewModel()
+    @State private var showingEditSheet = false
+    @State private var showingDeleteAlert = false
+    
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
@@ -97,6 +105,39 @@ struct FormateurDetailView: View {
             .padding()
         }
         .navigationTitle("Détails Formateur")
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Menu {
+                    Button(action: { showingEditSheet = true }) { // FORM-07
+                        Label("Modifier", systemImage: "pencil")
+                    }
+                    
+                    if authManager.isAdmin { // FORM-08 & SEC-05
+                        Button(role: .destructive, action: { showingDeleteAlert = true }) {
+                            Label("Supprimer", systemImage: "trash")
+                        }
+                    }
+                } label: {
+                    Image(systemName: "ellipsis.circle")
+                }
+            }
+        }
+        // NEW: Sheet for Edit (placeholder)
+        .sheet(isPresented: $showingEditSheet) {
+            FormateurFormView(viewModel: viewModel, formateurToEdit: formateur)
+        }
+        // NEW: Alert for Delete
+        .alert("Supprimer le formateur", isPresented: $showingDeleteAlert) {
+            Button("Annuler", role: .cancel) { }
+            Button("Supprimer", role: .destructive) {
+                Task {
+                    await viewModel.deleteFormateur(id: formateur.id)
+                    if viewModel.errorMessage == nil { dismiss() }
+                }
+            }
+        } message: {
+            Text("Êtes-vous sûr de vouloir supprimer le formateur \(formateur.prenom) \(formateur.nom)?")
+        }
     }
 }
 
