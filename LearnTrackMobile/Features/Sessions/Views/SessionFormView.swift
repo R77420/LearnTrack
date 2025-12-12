@@ -36,9 +36,8 @@ struct SessionFormView: View {
                     TextField("Titre (ou module)", text: $titre)
                     
                     Picker("Modalité", selection: $modalite) {
-                        ForEach(["Présentiel", "Distanciel"], id: \.self) {
-                            Text($0)
-                        }
+                        Text("Présentiel").tag("Présentiel")
+                        Text("Distanciel").tag("Distanciel")
                     }
                     
                     TextField("Lieu", text: $lieu)
@@ -149,7 +148,15 @@ struct SessionFormView: View {
             
             titre = session.titre
             statut = session.statut
-            modalite = session.modalite ?? "Présentiel"
+            
+            // Map backend value (P/D or Full) to Picker tags (Full Strings)
+            let modRaw = session.modalite ?? "P"
+            if modRaw.prefix(1).uppercased() == "D" {
+                modalite = "Distanciel"
+            } else {
+                modalite = "Présentiel"
+            }
+
             lieu = session.lieu ?? ""
             
             // Convertit les Strings de date et heure en objets Date (nécessite des formateurs de date/heure)

@@ -101,6 +101,22 @@ struct FormateurDetailView: View {
                     }
                 }
                  .frame(maxWidth: .infinity, alignment: .leading)
+
+                
+                // Zone de Danger
+                Divider()
+                
+                Button(role: .destructive, action: { showingDeleteAlert = true }) {
+                    HStack {
+                        Image(systemName: "trash")
+                        Text("Supprimer le formateur")
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.red.opacity(0.1))
+                    .foregroundStyle(.red)
+                    .cornerRadius(10)
+                }
             }
             .padding()
         }
@@ -112,10 +128,8 @@ struct FormateurDetailView: View {
                         Label("Modifier", systemImage: "pencil")
                     }
                     
-                    if authManager.isAdmin { // FORM-08 & SEC-05
-                        Button(role: .destructive, action: { showingDeleteAlert = true }) {
-                            Label("Supprimer", systemImage: "trash")
-                        }
+                    Button(role: .destructive, action: { showingDeleteAlert = true }) {
+                        Label("Supprimer", systemImage: "trash")
                     }
                 } label: {
                     Image(systemName: "ellipsis.circle")

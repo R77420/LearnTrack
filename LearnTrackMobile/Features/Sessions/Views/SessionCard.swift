@@ -26,7 +26,7 @@ struct SessionCard: View {
             .foregroundStyle(.secondary)
             
             HStack {
-                Badge(text: session.modalite ?? "Présentiel", color: .purple)
+                Badge(text: session.modaliteDisplay, color: .purple)
                 Spacer()
                 Image(systemName: "chevron.right")
                     .foregroundStyle(.secondary)

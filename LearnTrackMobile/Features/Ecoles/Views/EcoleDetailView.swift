@@ -74,6 +74,10 @@ struct EcoleDetailView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
             .padding()
+            
+            deleteButton
+                .padding(.horizontal)
+                .padding(.bottom)
         }
         .navigationTitle("Détails École")
         .toolbar {
@@ -83,10 +87,9 @@ struct EcoleDetailView: View {
                         Label("Modifier", systemImage: "pencil")
                     }
                     
-                    if authManager.isAdmin { // ECO-07 & SEC-05
-                        Button(role: .destructive, action: { showingDeleteAlert = true }) {
-                            Label("Supprimer", systemImage: "trash")
-                        }
+                    // ECO-07 & SEC-05
+                    Button(role: .destructive, action: { showingDeleteAlert = true }) {
+                        Label("Supprimer", systemImage: "trash")
                     }
                 } label: {
                     Image(systemName: "ellipsis.circle")
@@ -108,6 +111,23 @@ struct EcoleDetailView: View {
             }
         } message: {
             Text("Êtes-vous sûr de vouloir supprimer l'école \(ecole.nom)?")
+        }
+    }
+    
+    private var deleteButton: some View {
+        VStack {
+            Divider()
+            Button(role: .destructive, action: { showingDeleteAlert = true }) {
+                HStack {
+                    Image(systemName: "trash")
+                    Text("Supprimer l'école")
+                }
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color.red.opacity(0.1))
+                .foregroundStyle(.red)
+                .cornerRadius(10)
+            }
         }
     }
 }

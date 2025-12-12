@@ -29,9 +29,8 @@ class AuthAPI {
     
     /// Demande de réinitialisation de mot de passe
     func resetPassword(email: String) async throws {
-        // Simulation of API Call since endpoint is not strictly defined in docs
-        // In a real app: try await requestNoContent("/auth/reset-password", method: "POST", body: ["email": email])
-        // For now, we simulate network delay and success
+        // REVERTED to Simulation: The backend endpoint "/auth/reset-password" returns 404 (Not Found).
+        // The user confirmed this. Until the backend implements this endpoint, we simulate success.
         try await Task.sleep(nanoseconds: 1_000_000_000)
     }
     

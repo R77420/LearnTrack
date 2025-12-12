@@ -20,12 +20,18 @@ struct Session: Codable, Identifiable {
     let nbParticipants: Int?
     let statut: String
     let prix: Double?
+    let tarifSousTraitant: Double?
+    let fraisRembourser: Double?
+    let refContrat: String?
     let notes: String?
     let modalite: String?
     let lieu: String?
 
     enum CodingKeys: String, CodingKey {
         case id, titre, description, statut, prix, notes, modalite, lieu
+        case tarifSousTraitant = "tarif_sous_traitant"
+        case fraisRembourser = "frais_rembourser"
+        case refContrat = "ref_contrat"
         case dateDebut = "date_debut"
         case dateFin = "date_fin"
         case heureDebut = "heure_debut"
@@ -36,6 +42,13 @@ struct Session: Codable, Identifiable {
         case nbParticipants = "nb_participants"
     }
     
+    // Helper for proper display regardless of storage format (P/D or Full String)
+    var modaliteDisplay: String {
+        guard let m = modalite, !m.isEmpty else { return "Présentiel" }
+        let firstChar = m.prefix(1).uppercased()
+        return firstChar == "D" ? "Distanciel" : "Présentiel"
+    }
+
     // Helper method for sharing (SESS-06)
     var shareText: String {
         let priceText = prix != nil ? String(format: "%.2f €", prix!) : "Non spécifié"
@@ -46,7 +59,7 @@ struct Session: Codable, Identifiable {
             🏷️ Titre : \(titre)
             📅 Dates : du \(dateDebut) au \(dateFin)
             ⏰ Horaires : \(heureDebut ?? "N/A") – \(heureFin ?? "N/A")
-            💻 Modalité : \(modalite ?? "N/A")
+            💻 Modalité : \(modaliteDisplay)
             📍 Lieu : \(lieu ?? "N/A")
             💶 Tarif client : \(priceText)
             """

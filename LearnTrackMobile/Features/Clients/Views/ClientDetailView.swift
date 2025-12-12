@@ -91,7 +91,10 @@ struct ClientDetailView: View {
                     InfoRow(label: "Sessions", value: "3")
                     InfoRow(label: "CA Total", value: "4 500 €")
                 }
+
                 .frame(maxWidth: .infinity, alignment: .leading)
+                
+                deleteButton
             }
             .padding()
         }
@@ -105,10 +108,9 @@ struct ClientDetailView: View {
                     }
                     
                     // CLI-07 & SEC-05: Supprimer (Admin Only)
-                    if authManager.isAdmin {
-                        Button(role: .destructive, action: { showingDeleteAlert = true }) {
-                            Label("Supprimer", systemImage: "trash")
-                        }
+                    // CLI-07 & SEC-05: Supprimer
+                    Button(role: .destructive, action: { showingDeleteAlert = true }) {
+                        Label("Supprimer", systemImage: "trash")
                     }
                 } label: {
                     Image(systemName: "ellipsis.circle")
@@ -130,6 +132,24 @@ struct ClientDetailView: View {
             }
         } message: {
             Text("Êtes-vous sûr de vouloir supprimer le client \(client.nom)?")
+        }
+    }
+    
+    // Helper View for bottom delete button
+    private var deleteButton: some View {
+        VStack {
+            Divider()
+            Button(role: .destructive, action: { showingDeleteAlert = true }) {
+                HStack {
+                    Image(systemName: "trash")
+                    Text("Supprimer le client")
+                }
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color.red.opacity(0.1))
+                .foregroundStyle(.red)
+                .cornerRadius(10)
+            }
         }
     }
 }

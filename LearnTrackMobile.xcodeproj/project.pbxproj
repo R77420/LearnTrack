@@ -6,11 +6,40 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXContainerItemProxy section */
+		95A2528F2EEC679F00E2A764 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C444A1A42EEB03D0004483BA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C444A1AB2EEB03D0004483BA;
+			remoteInfo = LearnTrackMobile;
+		};
+		95A252AA2EEC67CE00E2A764 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C444A1A42EEB03D0004483BA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C444A1AB2EEB03D0004483BA;
+			remoteInfo = LearnTrackMobile;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		95A2528B2EEC679F00E2A764 /* LearnTrackMobileTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LearnTrackMobileTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		95A252A42EEC67CE00E2A764 /* LearnTrackMobileUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LearnTrackMobileUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C444A1AC2EEB03D0004483BA /* LearnTrackMobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LearnTrackMobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		95A2528C2EEC679F00E2A764 /* LearnTrackMobileTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = LearnTrackMobileTests;
+			sourceTree = "<group>";
+		};
+		95A252A52EEC67CE00E2A764 /* LearnTrackMobileUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = LearnTrackMobileUITests;
+			sourceTree = "<group>";
+		};
 		C444A1AE2EEB03D0004483BA /* LearnTrackMobile */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = LearnTrackMobile;
@@ -19,6 +48,20 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		95A252882EEC679F00E2A764 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		95A252A12EEC67CE00E2A764 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C444A1A92EEB03D0004483BA /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -33,6 +76,8 @@
 			isa = PBXGroup;
 			children = (
 				C444A1AE2EEB03D0004483BA /* LearnTrackMobile */,
+				95A2528C2EEC679F00E2A764 /* LearnTrackMobileTests */,
+				95A252A52EEC67CE00E2A764 /* LearnTrackMobileUITests */,
 				C444A1AD2EEB03D0004483BA /* Products */,
 			);
 			sourceTree = "<group>";
@@ -41,6 +86,8 @@
 			isa = PBXGroup;
 			children = (
 				C444A1AC2EEB03D0004483BA /* LearnTrackMobile.app */,
+				95A2528B2EEC679F00E2A764 /* LearnTrackMobileTests.xctest */,
+				95A252A42EEC67CE00E2A764 /* LearnTrackMobileUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -48,6 +95,52 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		95A2528A2EEC679F00E2A764 /* LearnTrackMobileTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 95A252932EEC679F00E2A764 /* Build configuration list for PBXNativeTarget "LearnTrackMobileTests" */;
+			buildPhases = (
+				95A252872EEC679F00E2A764 /* Sources */,
+				95A252882EEC679F00E2A764 /* Frameworks */,
+				95A252892EEC679F00E2A764 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				95A252902EEC679F00E2A764 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				95A2528C2EEC679F00E2A764 /* LearnTrackMobileTests */,
+			);
+			name = LearnTrackMobileTests;
+			packageProductDependencies = (
+			);
+			productName = LearnTrackMobileTests;
+			productReference = 95A2528B2EEC679F00E2A764 /* LearnTrackMobileTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		95A252A32EEC67CE00E2A764 /* LearnTrackMobileUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 95A252AC2EEC67CE00E2A764 /* Build configuration list for PBXNativeTarget "LearnTrackMobileUITests" */;
+			buildPhases = (
+				95A252A02EEC67CE00E2A764 /* Sources */,
+				95A252A12EEC67CE00E2A764 /* Frameworks */,
+				95A252A22EEC67CE00E2A764 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				95A252AB2EEC67CE00E2A764 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				95A252A52EEC67CE00E2A764 /* LearnTrackMobileUITests */,
+			);
+			name = LearnTrackMobileUITests;
+			packageProductDependencies = (
+			);
+			productName = LearnTrackMobileUITests;
+			productReference = 95A252A42EEC67CE00E2A764 /* LearnTrackMobileUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		C444A1AB2EEB03D0004483BA /* LearnTrackMobile */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C444A1B72EEB03D4004483BA /* Build configuration list for PBXNativeTarget "LearnTrackMobile" */;
@@ -80,6 +173,14 @@
 				LastSwiftUpdateCheck = 2610;
 				LastUpgradeCheck = 2610;
 				TargetAttributes = {
+					95A2528A2EEC679F00E2A764 = {
+						CreatedOnToolsVersion = 26.1.1;
+						TestTargetID = C444A1AB2EEB03D0004483BA;
+					};
+					95A252A32EEC67CE00E2A764 = {
+						CreatedOnToolsVersion = 26.1.1;
+						TestTargetID = C444A1AB2EEB03D0004483BA;
+					};
 					C444A1AB2EEB03D0004483BA = {
 						CreatedOnToolsVersion = 26.1.1;
 					};
@@ -100,11 +201,27 @@
 			projectRoot = "";
 			targets = (
 				C444A1AB2EEB03D0004483BA /* LearnTrackMobile */,
+				95A2528A2EEC679F00E2A764 /* LearnTrackMobileTests */,
+				95A252A32EEC67CE00E2A764 /* LearnTrackMobileUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		95A252892EEC679F00E2A764 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		95A252A22EEC67CE00E2A764 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C444A1AA2EEB03D0004483BA /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -115,6 +232,20 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		95A252872EEC679F00E2A764 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		95A252A02EEC67CE00E2A764 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C444A1A82EEB03D0004483BA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -124,7 +255,102 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		95A252902EEC679F00E2A764 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C444A1AB2EEB03D0004483BA /* LearnTrackMobile */;
+			targetProxy = 95A2528F2EEC679F00E2A764 /* PBXContainerItemProxy */;
+		};
+		95A252AB2EEC67CE00E2A764 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C444A1AB2EEB03D0004483BA /* LearnTrackMobile */;
+			targetProxy = 95A252AA2EEC67CE00E2A764 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		95A252912EEC679F00E2A764 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = AWFXG8GCY7;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = LearnTrack.LearnTrackMobileTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LearnTrackMobile.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/LearnTrackMobile";
+			};
+			name = Debug;
+		};
+		95A252922EEC679F00E2A764 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = AWFXG8GCY7;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = LearnTrack.LearnTrackMobileTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LearnTrackMobile.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/LearnTrackMobile";
+			};
+			name = Release;
+		};
+		95A252AD2EEC67CE00E2A764 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = AWFXG8GCY7;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = LearnTrack.LearnTrackMobileUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = LearnTrackMobile;
+			};
+			name = Debug;
+		};
+		95A252AE2EEC67CE00E2A764 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = AWFXG8GCY7;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = LearnTrack.LearnTrackMobileUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = LearnTrackMobile;
+			};
+			name = Release;
+		};
 		C444A1B52EEB03D4004483BA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -323,6 +549,24 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		95A252932EEC679F00E2A764 /* Build configuration list for PBXNativeTarget "LearnTrackMobileTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				95A252912EEC679F00E2A764 /* Debug */,
+				95A252922EEC679F00E2A764 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		95A252AC2EEC67CE00E2A764 /* Build configuration list for PBXNativeTarget "LearnTrackMobileUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				95A252AD2EEC67CE00E2A764 /* Debug */,
+				95A252AE2EEC67CE00E2A764 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		C444A1A72EEB03D0004483BA /* Build configuration list for PBXProject "LearnTrackMobile" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
